@@ -51,6 +51,8 @@ module.exports.routes = {
   '/retirar-extrato': {
     view: 'extract'
   }
+  '/api/createEstacionamento': 'EstacionamentoController.createEstacionamento'
+
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *

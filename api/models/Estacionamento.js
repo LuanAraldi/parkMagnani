@@ -13,9 +13,6 @@ module.exports = {
     },
     precoPorMinuto: {
       type: 'float'
-    },
-    area: {
-      type: 'polygon'
     }
   }
 };
