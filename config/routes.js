@@ -33,9 +33,24 @@ module.exports.routes = {
   ***************************************************************************/
 
   '/': {
-    view: 'homepage'
+    view: 'main'
   }
 
+  '/cadastrar-veiculo': {
+    view: 'addcar'
+  }
+
+  '/cadastrar-trajeto': {
+    view: 'addcordenates'
+  }
+
+  '/encontrar-estacionamento': {
+    view: 'findparking'
+  }
+
+  '/retirar-extrato': {
+    view: 'extract'
+  }
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *
