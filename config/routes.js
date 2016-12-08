@@ -34,7 +34,9 @@ module.exports.routes = {
 
   '/': {
     view: 'homepage'
-  }
+  },
+
+  '/api/createEstacionamento': 'EstacionamentoController.createEstacionamento'
 
   /***************************************************************************
   *                                                                          *

@@ -6,6 +6,8 @@
  */
 
 module.exports = {
-	
+	createEstacionamento: function(req, res) {
+		var teste = 'teste';
+		res.json(teste);
+	}
 };
-
