@@ -7,7 +7,10 @@
 
 module.exports = {
 	createEstacionamento: function(req, res) {
-		var teste = 'teste';
-		res.json(teste);
+		var teste = {
+			nome : req.nome,
+			precoPorMinuto : req.precoPorMinuto
+		};
+		res.json(req.body);
 	}
 };
