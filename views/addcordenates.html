@@ -26,20 +26,30 @@
           <h5 class="">Cadastrar Trajeto</h5>
         </div>
 
-        <div class="input-field col s12">
-          <select class="grey darken-2" style="margin:10px;">
+        <div class="input-field white-text col s12 grey darken-2">
+          <select class="" style="margin:10px;">
             <option value="" disabled selected>Escolha o veículo</option>
             <option value="1">Option 1</option>
             <option value="2">Option 2</option>
             <option value="3">Option 3</option>
           </select>
-
-          <input type="date" class="datepicker">
-
-
         </div>
 
+        <div class="input-field white-text col s12 grey darken-2">
+         <input placeholder="Escolha uma data" type="date" class="datepicker">
+        </div>
 
+          <div class="input-field col s12 m6 white-text grey darken-2">
+            <span class="grey-text">Latitude</span><br/>
+            <input id="latitude" type="text">
+          </div>
+
+          <div class="input-field col s12 m6 white-text grey darken-2">
+            <span class="grey-text">Longitude</span><br/>
+            <input id="longitude" type="text">
+          </div>
+        <span class="red-text" id="longitude-aviso">Valor inválido! Deve ser maior ou igual que -180 e menor ou igual que 180</span>
+        <span class="red-text" id="latitude-aviso">Valor inválido! Deve ser maior ou igual que -90 e menor que ou igual 90</span>
 
       </div>
     </div>
@@ -64,11 +74,21 @@
   <script>
   $(function(){
 
+      // esconde avisos
+      $('#latitude-aviso').hide();
+      $('#longitude-aviso').hide();
+
       // faz funcionar o material select
       $('select').material_select();
       $input = $('.datepicker').pickadate();
+
+      // define mask para latitude
+      $.mask.definitions['~']='[-]?';
+      $('#latitude').mask("~999.99999");
+      $('#longitude').mask('~99.99999');
   });
   </script>
+
 </body>
 
 
