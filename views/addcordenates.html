@@ -41,12 +41,12 @@
 
           <div class="input-field col s12 m6 white-text grey darken-2">
             <span class="grey-text">Latitude</span><br/>
-            <input id="latitude" type="text">
+            <input id="latitude" type="text" style="border-bottom:grey;box-shadow:0 1px 0 0 grey;">
           </div>
 
           <div class="input-field col s12 m6 white-text grey darken-2">
             <span class="grey-text">Longitude</span><br/>
-            <input id="longitude" type="text">
+            <input id="longitude" type="text" style="border-bottom:grey;box-shadow:0 1px 0 0 grey;">
           </div>
         <span class="red-text" id="longitude-aviso">Valor inválido! Deve ser maior ou igual que -180 e menor ou igual que 180</span>
         <span class="red-text" id="latitude-aviso">Valor inválido! Deve ser maior ou igual que -90 e menor que ou igual 90</span>
@@ -86,6 +86,28 @@
       $.mask.definitions['~']='[-]?';
       $('#latitude').mask("~999.99999");
       $('#longitude').mask('~99.99999');
+
+      /* faz tratamento no salvar
+        para controlar o tamanho da latitude e longitude*/
+      $('#salvar').on('click', function(evt){
+        evt.preventDefault();
+        if($('#longitude').val() < -180 || $('#longitude').val() > 180)
+        {
+          if($('#latitude').val() < -90 || $('#latitude').val() > 90)
+          {
+            // verificar campos vazios
+              // se passar na verificação, realizar ajax
+              // se não, lançar exceção
+          }
+          else {
+            $('#latitude-aviso').show();
+          }
+        }
+        else {
+          $('#longitude-aviso').show();
+        }
+      });
+
   });
   </script>
 
