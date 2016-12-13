@@ -34,7 +34,7 @@ POST
 
 ```json
 {
-  "placa": 'MKH-3799'
+  "placa": "MKH-3799"
 }
 ```
   
