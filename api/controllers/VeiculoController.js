@@ -1,7 +1,7 @@
 /**
- * VeículoController
+ * VeiculoController
  *
- * @description :: Server-side logic for managing Veículoes
+ * @description :: Server-side logic for managing Veiculoes
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 

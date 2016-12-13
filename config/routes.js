@@ -34,24 +34,25 @@ module.exports.routes = {
 
   '/': {
     view: 'main'
-  }
+  },
 
   '/cadastrar-veiculo': {
     view: 'addcar'
-  }
+  },
 
   '/cadastrar-trajeto': {
     view: 'addcordenates'
-  }
+  },
 
   '/encontrar-estacionamento': {
     view: 'findparking'
-  }
+  },
 
   '/retirar-extrato': {
     view: 'extract'
-  }
-  '/api/createEstacionamento': 'EstacionamentoController.createEstacionamento'
+  },
+
+  '/api/createEstacionamento' : 'EstacionamentoController.createEstacionamento',
 
   /***************************************************************************
   *                                                                          *

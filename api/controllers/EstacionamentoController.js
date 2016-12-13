@@ -6,8 +6,8 @@
  */
 
 module.exports = {
-	createEstacionamento: function(req, res) {
-		var teste = {
+	create: function(req, res) {
+		var estacionamento = {
 			nome : req.nome,
 			precoPorMinuto : req.precoPorMinuto
 		};
