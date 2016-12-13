@@ -1,0 +1,163 @@
+<html>
+<head>
+
+  <!-- CSS -->
+  <link type="text/css" rel="stylesheet" href="../public/materialize/css/materialize.min.css">
+  <style>
+    table.striped>tbody>tr:nth-child(odd) {
+      background-color: #ffffff;
+    }
+  </style>
+
+  <title>
+    Magnani'Spark
+  </title>
+
+</head>
+
+<body class="blue-grey darken-1 valign-wrapper">
+  <div class="container valign" style="width:900px;">
+
+    <div class="row">
+      <div class="col s12 white-text center-align grey darken-4" style="margin-bottom:20px;">
+        <h1>Magnani'Spark</h1>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="card col s12 grey white-text" style="padding-top:30px;">
+
+        <div class="col s12">
+          <h5 class="">Retirar Extrato</h5>
+        </div>
+
+        <div class="input-field white-text col s12 grey darken-2">
+          <select class="" style="margin:10px;">
+            <option value="" disabled selected>Escolha o veículo</option>
+            <option value="1">Option 1</option>
+            <option value="2">Option 2</option>
+            <option value="3">Option 3</option>
+          </select>
+        </div>
+
+        <div class="row">
+          <div class="col s12 right-align">
+            <a class="btn waves-effect grey darken-4 waves-light" id="buscar" type="submit" style="width:200px;margin-top:10px;">Buscar
+            </a>
+          </div>
+        </div>
+
+        <div clas="col s10">
+            <table class="bordered responsive-table highlight">
+              <thead>
+                <tr>
+                    <th data-field="nome-estacionamento">Estacionamento</th>
+                    <th data-field="hora-entrada">Hora de Entrada</th>
+                    <th data-field="hora-saida">Hora de Saída</th>
+                    <th data-field="tempo">Tempo de Permanência</th>
+                    <th data-field="valor">Valor (R$)</th>
+                    <th data-field="pagar" class="center-align">Opção</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr>
+                  <td>Estacionamento Julio das 6 às 22 horas</td>
+                  <td>14:45</td>
+                  <td>15:45</td>
+                  <td>1 hora</td>
+                  <td>5,70</td>
+                  <td>
+                    <a class="btn waves-effect black valign waves-light" href="#" style="">pagar</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Estacionamento 24hrs</td>
+                  <td>14:45</td>
+                  <td>17:45</td>
+                  <td>3 horas</td>
+                  <td>15,00</td>
+                  <td>
+                    <a class="btn waves-effect black valign waves-light" href="#" style="">pagar</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Mega Estacionamento 24 horas</td>
+                  <td>14:45</td>
+                  <td>16:45</td>
+                  <td>2 horas</td>
+                  <td>4,00</td>
+                  <td>
+                    <a class="btn waves-effect black valign waves-light" href="#" style="">pagar</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Estacionamento do Zé</td>
+                  <td>11:45</td>
+                  <td>22:45</td>
+                  <td>11 horas</td>
+                  <td>33,00</td>
+                  <td>
+                    <a class="btn waves-effect black valign waves-light" href="#" style="">pagar</a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+      </div>
+    </div>
+    <!-- </div> -->
+
+    <div class="row">
+      <div class="col s6 left-align">
+        <a class="btn waves-effect grey waves-light" href="main.html" style="width:200px;">Voltar
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- JS -->
+  <script type="text/javascript" src="../public/jquery/jquery-3.1.1.min.js"></script>
+  <script type="text/javascript" src="../public/materialize/js/materialize.min.js"></script>
+  <script type="text/javascript" src="../public/maskedinput/maskedinput.min.js"></script>
+  <script>
+  $(function(){
+
+      // esconde avisos
+      $('#latitude-aviso').hide();
+      $('#longitude-aviso').hide();
+
+      // faz funcionar o material select
+      $('select').material_select();
+
+      // define mask para latitude
+      $.mask.definitions['~']='[-]?';
+      $('#latitude').mask("~999.99999");
+      $('#longitude').mask('~99.99999');
+
+      /* faz tratamento no salvar
+        para controlar o tamanho da latitude e longitude*/
+      $('#buscar').on('click', function(evt){
+        evt.preventDefault();
+        if($('#latitude').val() < -90 || $('#longitude').val() > 90)
+        {
+          if($('#longitude').val() < -180 || $('#latitude').val() > 180)
+          {
+            // verificar campos vazios
+              // se passar na verificação, realizar ajax
+              // se não, lançar exceção
+          }
+          else {
+            $('#latitude-aviso').show();
+          }
+        }
+        else {
+          $('#longitude-aviso').show();
+        }
+      });
+
+  });
+  </script>
+  </body>
+</html>
