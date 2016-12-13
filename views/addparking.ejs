@@ -1,0 +1,176 @@
+<!-- <html>
+<head> -->
+
+  <!-- CSS -->
+  <!-- <link type="text/css" rel="stylesheet" href="../public/materialize/css/materialize.min.css"> -->
+
+  <!-- <title>
+    Magnani'Spark
+  </title>
+
+</head>
+
+<body class="blue-grey darken-1 valign-wrapper"> -->
+  <div class="container valign" style="width:900px;">
+
+    <div class="row">
+      <div class="col s12 white-text center-align grey darken-4" style="margin-bottom:20px;">
+        <h1>Magnani'Spark</h1>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="card col s12 grey white-text" style="padding-top:30px;">
+
+        <div class="col s12">
+          <h5 class="">Cadastrar Estacionamento</h5>
+        </div>
+
+        <div class="input-field col s12 m6 white-text grey darken-2">
+          <span class="grey-text">Nome</span><br/>
+          <input id="nome-estacionamento" type="text" style="border-bottom:grey;box-shadow:0 1px 0 0 grey;">
+        </div>
+
+        <div class="input-field col s12 m6 white-text grey darken-2" style="margin-bottom:10px;">
+          <span class="grey-text">Preço por minuto (R$)</span><br/>
+          <input id="preco-minuto-estacionamento" type="text" style="border-bottom:grey;box-shadow:0 1px 0 0 grey;">
+        </div>
+        <p id="preco-aviso" class="red-text">Preço inválido, digite novamente.</p>
+        <p id="nome-aviso" class="red-text">Digite um nome.</p>
+
+        <hr><p>Pontos</p>
+        <br/>
+        <div class="row" style="margin-right:1px;margin-left:1px;">
+          <h6>Ponto 1</h6>
+          <div class="input-field col s12 m6 white-text grey darken-2">
+            <span class="grey-text">Latitude Ponto 1</span><br/>
+            <input id="latitude-p1" type="text" style="border-bottom:grey;box-shadow:0 1px 0 0 grey;">
+          </div>
+
+          <div class="input-field col s12 m6 white-text grey darken-2">
+            <span class="grey-text">Longitude Ponto 1</span><br/>
+            <input id="longitude-p1" type="text" style="border-bottom:grey;box-shadow:0 1px 0 0 grey;">
+          </div>
+          <p class="red-text" id="longitude-aviso-p1">Valor de latitude do ponto 2 inválido! Deve ser maior ou igual que -180 e menor ou igual que +180</p>
+          <p class="red-text" id="latitude-aviso-p1">Valor de longitude do ponto 2 inválido! Deve ser maior ou igual que -90 e menor que ou igual +90</p>
+        </div>
+
+        <div class="row" style="margin-right:1px;margin-left:1px;">
+          <h6>Ponto 2</h6>
+          <div class="input-field col s12 m6 white-text grey darken-2">
+            <span class="grey-text">Latitude Ponto 2</span><br/>
+            <input id="latitude-p2" type="text" style="border-bottom:grey;box-shadow:0 1px 0 0 grey;">
+          </div>
+
+          <div class="input-field col s12 m6 white-text grey darken-2">
+            <span class="grey-text">Longitude Ponto 2</span><br/>
+            <input id="longitude-p2" type="text" style="border-bottom:grey;box-shadow:0 1px 0 0 grey;">
+          </div>
+          <p class="red-text" id="longitude-aviso-p2">Valor de latitude do ponto 2 inválido! Deve ser maior ou igual que -180 e menor ou igual que +180</p>
+          <p class="red-text" id="latitude-aviso-p2">Valor de longitude do ponto 2 inválido! Deve ser maior ou igual que -90 e menor que ou igual +90</p>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col s6 center-align">
+        <a class="btn waves-effect grey waves-light" href="/" style="width:200px;">Cancelar
+        </a>
+      </div>
+      <div class="col s6 center-align">
+        <a class="btn waves-effect grey darken-4 waves-light" id="salvar" type="submit" style="width:200px;">Salvar
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- JS -->
+  <!-- <script type="text/javascript" src="../public/jquery/jquery-3.1.1.min.js"></script>
+  <script type="text/javascript" src="../public/materialize/js/materialize.min.js"></script>
+  <script type="text/javascript" src="../public/maskedinput/maskedinput.min.js"></script> -->
+  <script>
+  $(function(){
+
+      // esconde avisos ponto 1
+      $('#latitude-aviso-p1').hide();
+      $('#longitude-aviso-p1').hide();
+      // esconde avisos ponto 2
+      $('#latitude-aviso-p2').hide();
+      $('#longitude-aviso-p2').hide();
+      // esconde aviso do preco
+      $('#preco-aviso').hide();
+      // esconde aviso do nome
+      $('#nome-aviso').hide();
+
+      // define mascara para longitude e latitude
+      $.mask.definitions['~']='[-]?';
+      $('#latitude-p1').mask("~999.99999");
+      $('#longitude-p1').mask('~99.99999');
+
+      $('#latitude-p2').mask("~999.99999");
+      $('#longitude-p2').mask('~99.99999');
+
+      // define mask para latitude
+      $.mask.definitions['n'] = "[0-9]";
+      $('#preco-minuto-estacionamento').mask('nn');
+
+      /* faz tratamento no salvar
+        para controlar o tamanho da latitude e longitude*/
+      $('#salvar').on('click', function(evt){
+        evt.preventDefault();
+        if($('#nome-estacionamento').val().trim() !== '')
+        {
+          $('#nome-aviso').hide();
+          if($('#preco-minuto-estacionamento').val().trim() !== '' || $('preco-minuto-estacionamento').val() > 0)
+          {
+            $('#preco-aviso').hide();
+            if($('#longitude-p1').val() < -180 || $('#longitude').val() > 180)
+            {
+              $('#longitude-aviso-p1').hide();
+              if($('#latitude-p1').val() < -90 || $('#latitude').val() > 90)
+              {
+                $('#latitude-aviso-p1').hide();
+                if($('#longitude-p2').val() < -180 || $('#longitude').val() > 180)
+                {
+                  $('#longitude-aviso-p2').hide();
+                  if($('#latitude-p2').val() < -90 || $('#latitude').val() > 90)
+                  {
+                    $('#latitude-aviso-p2').hide();
+
+                    // executar ajax a partir daqui
+
+                  }
+                  else {
+                    $('#latitude-aviso-p2').show();
+                  }
+                }
+                else {
+                  $('#longitude-aviso-p2').show();
+                }
+              }
+              else {
+                $('#latitude-aviso-p1').show();
+              }
+            }
+            else {
+              $('#longitude-aviso-p1').show();
+            }
+          }
+          else {
+            $('#preco-aviso').show();
+          }
+        }
+        else {
+          $('#nome-aviso').show();
+        }
+      });
+
+  });
+  </script>
+
+<!-- </body>
+
+
+</html> -->
