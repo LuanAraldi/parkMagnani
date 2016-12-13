@@ -5,7 +5,7 @@ a [Sails](http://sailsjs.org) application
 
 # Rotas API
 
-Cadastro de Estacionamento  
+######Cadastro de Estacionamento  
 http://localhost:1337/api/createEstacionamento
 
 POST
@@ -27,7 +27,7 @@ POST
 }
 ```
 
-Cadastro de Veículo
+######Cadastro de Veículo
 http://localhost:1337/veiculo/create
 
 POST
