@@ -26,3 +26,15 @@ POST
   ]
 }
 ```
+
+Cadastro de Veículo
+http://localhost:1337/veiculo/create
+
+POST
+
+```json
+{
+  "placa": 'MKH-3799'
+}
+```
+  
