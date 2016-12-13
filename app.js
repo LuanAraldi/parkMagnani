@@ -55,6 +55,7 @@ try {
   }
 }
 
+var async = require('async');
 
 // Start server
 sails.lift(rc('sails'));
