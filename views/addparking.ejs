@@ -144,70 +144,41 @@
         if($('#nome-estacionamento').val().trim() !== '')
         {
           $('#nome-aviso').hide();
-          if($('#preco-minuto-estacionamento').val().trim() !== '' || $('preco-minuto-estacionamento').val() > 0 && $.isNumeric($('preco-minuto-estacionamento').val()))
+          if($('#preco-minuto-estacionamento').val().trim() !== '' && $('#preco-minuto-estacionamento').val() > 0)
           {
-            $('#preco-aviso').hide();
-            if($('#longitude-p1').val() < -180 || $('#longitude').val() > 180)
-            {
-              $('#longitude-aviso-p1').hide();
-              if($('#latitude-p1').val() < -90 || $('#latitude').val() > 90)
-              {
-                $('#latitude-aviso-p1').hide();
-                if($('#longitude-p2').val() < -180 || $('#longitude').val() > 180)
+            $('#preco-aviso').hide()
+            // monta o objeto json que vai ser enviado
+            var nome = $('#nome-estacionamento').val().trim();
+            var preco = $('#preco-minuto-estacionamento').val();
+            var _json_object = {
+              "nome": nome,
+              "precoPorMinuto": preco,
+              "pontos": [
                 {
-                  $('#longitude-aviso-p2').hide();
-                  if($('#latitude-p2').val() < -90 || $('#latitude').val() > 90)
-                  {
-                    $('#latitude-aviso-p2').hide();
-
-                    // monta o objeto json que vai ser enviado
-                    var nome = $('#nome-estacionamento').val().trim();
-                    var preco = $('#preco-minuto-estacionamento').val();
-                    var _json_object = {
-                      "nome": nome,
-                      "precoPorMinuto": preco,
-                      "pontos": [
-                        {
-                          "latitude": $('#latitude-p1').val(),
-                          "longitude": $('#longitude-p1').val()
-                        },
-                        {
-                          "latitude": $('#latitude-p2').val(),
-                          "longitude": $('#longitude-p2').val()
-                        }
-                      ]
-                    }
-                    setTimeout(function(){
-                      $.ajax({
-                          url:        'http://localhost:1337/veiculo/create',
-                          dataType:   'JSON',
-                          data: _json_object,
-                          method:     'POST'
-                      }).done(function(ret) {
-                        $('#load').hide(); $('#salvar').show(); $('#success').show(); $('#addcar').val('');
-                      }).fail(function(req) {
-                        $('#error').show();
-                      }).always(function() {
-                        $('#load').hide();   $('#salvar').show();
-                      });
-                    }, 2000);
-
-                  }
-                  else {
-                    $('#latitude-aviso-p2').show();
-                  }
+                  "latitude": $('#latitude-p1').val(),
+                  "longitude": $('#longitude-p1').val()
+                },
+                {
+                  "latitude": $('#latitude-p2').val(),
+                  "longitude": $('#longitude-p2').val()
                 }
-                else {
-                  $('#longitude-aviso-p2').show();
-                }
-              }
-              else {
-                $('#latitude-aviso-p1').show();
-              }
+              ]
             }
-            else {
-              $('#longitude-aviso-p1').show();
-            }
+            $('#salvar').hide(); $('#load').show();
+            setTimeout(function(){
+              $.ajax({
+                  url:        'http://localhost:1337/estacionamento/create',
+                  dataType:   'JSON',
+                  data: _json_object,
+                  method:     'POST'
+              }).done(function(ret) {
+                $('#load').hide(); $('#salvar').show(); $('#success').show(); $('#addcar').val('');
+              }).fail(function(req) {
+                $('#error').show();
+              }).always(function() {
+                $('#load').hide(); $('#salvar').show();
+              });
+            }, 2000);
           }
           else {
             $('#preco-aviso').show();
