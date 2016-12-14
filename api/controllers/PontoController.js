@@ -14,11 +14,13 @@ module.exports = {
 			id: 0,
 			area: '',
 			estacionamentoAtual: '',
-			velocidade: 0
+			velocidade: 0,
+			pontoAnterior: '',
+			faturado: false
 		};
 
-		var query = "INSERT INTO ponto (data, area, veiculo) VALUES ('";
-		query += ponto.data + "', ST_PointFromText('POINT (" + ponto.posicao.longitude + " " +  ponto.posicao.latitude + ")', 4326)," + ponto.veiculo + ")";
+		var query = "INSERT INTO ponto (data, area, veiculo, faturado) VALUES ('";
+		query += ponto.data + "', ST_PointFromText('POINT (" + ponto.posicao.longitude + " " +  ponto.posicao.latitude + ")', 4326)," + ponto.veiculo + "," + ponto.faturado +")";
 		query += "RETURNING id, area;"
 
 		Ponto.query(query, [], function (err, rawResult) {
@@ -30,7 +32,7 @@ module.exports = {
 				Estacionamento.query(query, [], function(err, rawResult) {
 					var estacionado = false;
 					query = "SELECT ((ST_Distance_Sphere(area,  ST_GeomFromText('POINT(" + ponto.posicao.longitude +" " + ponto.posicao.latitude +")', 4326)) / EXTRACT(MINUTE FROM ('" + ponto.data + "' - data)) * 60) * 3.6)"
-					query += " as velocidade FROM ponto WHERE veiculo = " + ponto.veiculo + "AND id != " + ponto.id + " ORDER BY data DESC LIMIT 1";
+					query += " as velocidade, faturado FROM ponto WHERE veiculo = " + ponto.veiculo + "AND id != " + ponto.id + " ORDER BY data DESC LIMIT 1";
 					if (rawResult.rowCount > 0) {
 						ponto.estacionamentoAtual = rawResult.rows[0].nome;
 					}

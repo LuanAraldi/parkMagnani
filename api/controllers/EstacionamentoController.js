@@ -28,8 +28,13 @@ module.exports = {
 		query += "))', 4326)) RETURNING id;"
 
 		Estacionamento.query(query, [], function (err, rawResult) {
-			estacionamento['id'] = rawResult.rows[0].id;
-			res.json(estacionamento);
+			if (err) {
+			}else{
+				if (rawResult.rowCount > 0) {
+					estacionamento['id'] = rawResult.rows[0].id;
+					res.json(estacionamento);
+				}
+			}
 		})
 	},
 
