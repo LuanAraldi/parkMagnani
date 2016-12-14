@@ -52,8 +52,8 @@ module.exports.routes = {
     view: 'extract'
   },
 
-  '/api/createEstacionamento' : 'EstacionamentoController.createEstacionamento',
 
+<<<<<<< Updated upstream
   '/cadastrar-estacionamento': {
     view: 'addparking'
   }
@@ -75,6 +75,9 @@ module.exports.routes = {
   // }
   //'/api/createEstacionamento': 'EstacionamentoController.createEstacionamento'
 
+=======
+>>>>>>> Stashed changes
+  'GET estacionamento/proximos' : 'EstacionamentoController@proximos'
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *
