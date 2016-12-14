@@ -27,7 +27,7 @@
         </div>
 
         <div class="input-field white-text col s12 grey darken-2">
-          <select class="" style="margin:10px;">
+          <select id="" class="" style="margin:10px;">
             <option value="" disabled selected>Escolha o veículo</option>
             <option value="1">Option 1</option>
             <option value="2">Option 2</option>
@@ -95,10 +95,7 @@
         {
           if($('#latitude').val() < -90 || $('#latitude').val() > 90)
           {
-            // verificar campos vazios
-              // se passar na verificação, realizar ajax
-                // ao confirmar, mostra informações como mostra no mockup
-              // se não, lançar exceção
+
           }
           else {
             $('#latitude-aviso').show();

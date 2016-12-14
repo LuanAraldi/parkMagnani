@@ -51,8 +51,8 @@
             <span class="grey-text">Longitude Ponto 1</span><br/>
             <input id="longitude-p1" type="text" style="border-bottom:grey;box-shadow:0 1px 0 0 grey;">
           </div>
-          <p class="red-text" id="longitude-aviso-p1">Valor de latitude do ponto 2 inválido! Deve ser maior ou igual que -180 e menor ou igual que +180</p>
-          <p class="red-text" id="latitude-aviso-p1">Valor de longitude do ponto 2 inválido! Deve ser maior ou igual que -90 e menor que ou igual +90</p>
+          <p class="red-text" id="longitude-aviso-p1">Valor de latitude do ponto 1 inválido! Deve ser maior ou igual que -180 e menor ou igual que +180</p>
+          <p class="red-text" id="latitude-aviso-p1">Valor de longitude do ponto 1 inválido! Deve ser maior ou igual que -90 e menor que ou igual +90</p>
         </div>
 
         <div class="row" style="margin-right:1px;margin-left:1px;">
@@ -82,8 +82,24 @@
         <a class="btn waves-effect grey darken-4 waves-light" id="salvar" type="submit" style="width:200px;">Salvar
         </a>
       </div>
+      <div id="load" class="col s6">
+        <div class="preloader-wrapper small active">
+          <div class="spinner-layer spinner-yellow-only">
+            <div class="circle-clipper left">
+              <div class="circle"></div>
+            </div><div class="gap-patch">
+              <div class="circle"></div>
+            </div><div class="circle-clipper right">
+              <div class="circle"></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-
+    <div class="row">
+        <p id="success" class="green-text">Estacionamento cadastrado com sucesso!</p>
+        <p id="error" class="red-text">Houve um erro ao cadastrar o estacionamento!</p>
+    </div>
   </div>
 
   <!-- JS -->
@@ -92,6 +108,8 @@
   <script type="text/javascript" src="../public/maskedinput/maskedinput.min.js"></script> -->
   <script>
   $(function(){
+      // esconde load
+      $('#load').hide();
 
       // esconde avisos ponto 1
       $('#latitude-aviso-p1').hide();
@@ -104,6 +122,10 @@
       // esconde aviso do nome
       $('#nome-aviso').hide();
 
+      // esconde avisos de sucesso e error
+      $('#success').hide();
+      $('#error').hide();
+
       // define mascara para longitude e latitude
       $.mask.definitions['~']='[-]?';
       $('#latitude-p1').mask("~999.99999");
@@ -113,8 +135,7 @@
       $('#longitude-p2').mask('~99.99999');
 
       // define mask para latitude
-      $.mask.definitions['n'] = "[0-9]";
-      $('#preco-minuto-estacionamento').mask('nn');
+      $('#preco-minuto-estacionamento').mask('99.99');
 
       /* faz tratamento no salvar
         para controlar o tamanho da latitude e longitude*/
@@ -123,7 +144,7 @@
         if($('#nome-estacionamento').val().trim() !== '')
         {
           $('#nome-aviso').hide();
-          if($('#preco-minuto-estacionamento').val().trim() !== '' || $('preco-minuto-estacionamento').val() > 0)
+          if($('#preco-minuto-estacionamento').val().trim() !== '' || $('preco-minuto-estacionamento').val() > 0 && $.isNumeric($('preco-minuto-estacionamento').val()))
           {
             $('#preco-aviso').hide();
             if($('#longitude-p1').val() < -180 || $('#longitude').val() > 180)
@@ -139,7 +160,37 @@
                   {
                     $('#latitude-aviso-p2').hide();
 
-                    // executar ajax a partir daqui
+                    // monta o objeto json que vai ser enviado
+                    var nome = $('#nome-estacionamento').val().trim();
+                    var preco = $('#preco-minuto-estacionamento').val();
+                    var _json_object = {
+                      "nome": nome,
+                      "precoPorMinuto": preco,
+                      "pontos": [
+                        {
+                          "latitude": $('#latitude-p1').val(),
+                          "longitude": $('#longitude-p1').val()
+                        },
+                        {
+                          "latitude": $('#latitude-p2').val(),
+                          "longitude": $('#longitude-p2').val()
+                        }
+                      ]
+                    }
+                    setTimeout(function(){
+                      $.ajax({
+                          url:        'http://localhost:1337/veiculo/create',
+                          dataType:   'JSON',
+                          data: _json_object,
+                          method:     'POST'
+                      }).done(function(ret) {
+                        $('#load').hide(); $('#salvar').show(); $('#success').show(); $('#addcar').val('');
+                      }).fail(function(req) {
+                        $('#error').show();
+                      }).always(function() {
+                        $('#load').hide();   $('#salvar').show();
+                      });
+                    }, 2000);
 
                   }
                   else {
