@@ -8,6 +8,8 @@ a [Sails](http://sailsjs.org) application
 ######Cadastro de Estacionamento  
 http://localhost:1337/estacionamento/create
 
+:exclamation::exclamation::exclamation:***LEMBRAR DE QUE AO CADASTRAR UM POLIGONO(PONTOS DO ESTACIONAMENTO) O ÚLTIMO PONTO DO VETOR TEM DE SER IGUAL AO PRIMEIRO!!!***:exclamation::exclamation::exclamation:
+
 POST
 
 ```json
@@ -53,3 +55,8 @@ POST
   "veiculo": "id_do_veiculo"
 }
 ```
+
+######Estacionamentos Próximos
+http://localhost:1337/estacionamento/proximos?latitude=XXX&longitude=YYY
+
+GET

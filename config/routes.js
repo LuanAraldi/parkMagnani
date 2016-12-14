@@ -52,7 +52,6 @@ module.exports.routes = {
     view: 'extract'
   },
 
-  '/api/createEstacionamento' : 'EstacionamentoController.createEstacionamento',
 
   '/cadastrar-estacionamento': {
     view: 'addparking'
@@ -75,6 +74,7 @@ module.exports.routes = {
   // }
   //'/api/createEstacionamento': 'EstacionamentoController.createEstacionamento'
 
+  'GET estacionamento/proximos' : 'EstacionamentoController@proximos'
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *
