@@ -38,36 +38,35 @@
         <p id="preco-aviso" class="red-text">Preço inválido, digite novamente.</p>
         <p id="nome-aviso" class="red-text">Digite um nome.</p>
 
-        <hr><p>Pontos</p>
-        <br/>
-        <div class="row" style="margin-right:1px;margin-left:1px;">
-          <h6>Ponto 1</h6>
-          <div class="input-field col s12 m6 white-text grey darken-2">
-            <span class="grey-text">Latitude Ponto 1</span><br/>
-            <input id="latitude-p1" type="text" style="border-bottom:grey;box-shadow:0 1px 0 0 grey;">
+        <hr>
+        Pontos
+        <div id="" class="row" style="margin-right:1px;margin-left:1px;">
+          <div class="input-field col s2 white-text grey darken-2">
+            <span class="grey-text">Quantidade de pontos</span>
+            <input id="qtd-pontos" type="text" style="border-bottom:grey;box-shadow:0 1px 0 0 grey;">
           </div>
-
-          <div class="input-field col s12 m6 white-text grey darken-2">
-            <span class="grey-text">Longitude Ponto 1</span><br/>
-            <input id="longitude-p1" type="text" style="border-bottom:grey;box-shadow:0 1px 0 0 grey;">
+          <div>
+            <a class="btn waves-effect grey darken-4 waves-light" id="gerar-btn" type="submit" style="margin-top:50px;">Gerar
+            </a>
+            <div id="load-gerar" class="col s6" style="margin-top:50px;">
+              <div class="preloader-wrapper small active">
+                <div class="spinner-layer spinner-yellow-only">
+                  <div class="circle-clipper left">
+                    <div class="circle"></div>
+                  </div><div class="gap-patch">
+                    <div class="circle"></div>
+                  </div><div class="circle-clipper right">
+                    <div class="circle"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <p class="red-text" id="longitude-aviso-p1">Valor de latitude do ponto 1 inválido! Deve ser maior ou igual que -180 e menor ou igual que +180</p>
-          <p class="red-text" id="latitude-aviso-p1">Valor de longitude do ponto 1 inválido! Deve ser maior ou igual que -90 e menor que ou igual +90</p>
+          <p class="red-text" id="pontos-aviso">Valor inválido.</p>
         </div>
+        <br/>
 
-        <div class="row" style="margin-right:1px;margin-left:1px;">
-          <h6>Ponto 2</h6>
-          <div class="input-field col s12 m6 white-text grey darken-2">
-            <span class="grey-text">Latitude Ponto 2</span><br/>
-            <input id="latitude-p2" type="text" style="border-bottom:grey;box-shadow:0 1px 0 0 grey;">
-          </div>
-
-          <div class="input-field col s12 m6 white-text grey darken-2">
-            <span class="grey-text">Longitude Ponto 2</span><br/>
-            <input id="longitude-p2" type="text" style="border-bottom:grey;box-shadow:0 1px 0 0 grey;">
-          </div>
-          <p class="red-text" id="longitude-aviso-p2">Valor de latitude do ponto 2 inválido! Deve ser maior ou igual que -180 e menor ou igual que +180</p>
-          <p class="red-text" id="latitude-aviso-p2">Valor de longitude do ponto 2 inválido! Deve ser maior ou igual que -90 e menor que ou igual +90</p>
+        <div id="gerar-row" class="col s12" style="margin-right:1px;margin-left:1px;">
         </div>
 
       </div>
@@ -108,9 +107,13 @@
   <script type="text/javascript" src="../public/maskedinput/maskedinput.min.js"></script> -->
   <script>
   $(function(){
+      // qtd pontos atuais
+      var i = 1;
       // esconde load
       $('#load').hide();
-
+      $('#load-gerar').hide();
+      // esconde aviso pontos
+      $('#pontos-aviso').hide();
       // esconde avisos ponto 1
       $('#latitude-aviso-p1').hide();
       $('#longitude-aviso-p1').hide();
@@ -121,18 +124,16 @@
       $('#preco-aviso').hide();
       // esconde aviso do nome
       $('#nome-aviso').hide();
-
       // esconde avisos de sucesso e error
       $('#success').hide();
       $('#error').hide();
-
       // define mascara para longitude e latitude
       $.mask.definitions['~']='[-]?';
-      $('#latitude-p1').mask("~999.99999");
-      $('#longitude-p1').mask('~99.99999');
+      $('#longitude-p2').mask("~999.9999");
+      $('#latitude-p1').mask('~99.9999');
 
-      $('#latitude-p2').mask("~999.99999");
-      $('#longitude-p2').mask('~99.99999');
+      $('#longitude-p2').mask("~999.9999");
+      $('#latitude-p2').mask('~99.9999');
 
       // define mask para latitude
       $('#preco-minuto-estacionamento').mask('99.99');
@@ -150,20 +151,33 @@
             // monta o objeto json que vai ser enviado
             var nome = $('#nome-estacionamento').val().trim();
             var preco = $('#preco-minuto-estacionamento').val();
+
+            var qtdPontos = $('#qtd-pontos').val();
+
+            var pontos = [];
+            var ponto = [];
+            for(var j = 1; j <= i; j++)
+            {
+              if (j == i) {
+                ponto[j] = {
+                  "latitude": $('#latitude-p1').val(),
+                  "longitude": $('#longitude-p1').val()
+                };
+              }
+              else {
+                ponto[j] = {
+                  "latitude": $('#latitude-p'+j).val(),
+                  "longitude": $('#longitude-p'+j).val()
+                };
+              }
+              pontos.push(ponto);
+            }
+
             var _json_object = {
               "nome": nome,
               "precoPorMinuto": preco,
-              "pontos": [
-                {
-                  "latitude": $('#latitude-p1').val(),
-                  "longitude": $('#longitude-p1').val()
-                },
-                {
-                  "latitude": $('#latitude-p2').val(),
-                  "longitude": $('#longitude-p2').val()
-                }
-              ]
-            }
+              "pontos": pontos
+            };
             $('#salvar').hide(); $('#load').show();
             setTimeout(function(){
               $.ajax({
@@ -188,6 +202,44 @@
           $('#nome-aviso').show();
         }
       });
+
+      $('#gerar-btn').on('click', function(){
+        if($('#qtd-pontos').val().trim() > 0)
+        {
+          $('#pontos-aviso').hide();
+          for(i; i <= $('#qtd-pontos').val(); i++)
+          {
+            addRow(i);
+          }
+        }
+        else {
+          if($('#qtd-pontos').val() === 0)
+          {
+            document.getElementById("gerar-row").remove();
+          }
+          else{
+            $('#pontos-aviso').show();
+          }
+        }
+      });
+
+      function addRow(i) {
+        var div = document.createElement('div');
+
+        div.className = 'row';
+
+        div.innerHTML = '<h6>Ponto '+i+'</h6>\
+                        <div class="input-field col s6 white-text grey darken-2">\
+                          <span class="grey-text">Latitude Ponto '+i+'</span><br/>\
+                          <input id="latitude-p'+i+'" type="text" style="border-bottom:grey;box-shadow:0 1px 0 0 grey;">\
+                        </div>\
+                        <div class="input-field col s6 white-text grey darken-2">\
+                          <span class="grey-text">Longitude Ponto '+i+'</span><br/>\
+                          <input id="longitude-p'+i+'" type="text" style="border-bottom:grey;box-shadow:0 1px 0 0 grey;">\
+                        </div>';
+
+         document.getElementById('gerar-row').appendChild(div);
+      }
 
   });
   </script>

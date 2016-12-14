@@ -26,12 +26,9 @@
           <h5 class="">Cadastrar Trajeto</h5>
         </div>
 
-        <div class="input-field white-text col s12 grey darken-2">
-          <select id="" class="" style="margin:10px;">
-            <option value="" disabled selected>Escolha o veículo</option>
-            <option value="1">Option 1</option>
-            <option value="2">Option 2</option>
-            <option value="3">Option 3</option>
+        <div class="col s12 input-field white-text grey darken-2">
+          <select id="select-car" style="margin:10px;">
+            <option value="0" disabled selected>Escolha o veículo</option>
           </select>
         </div>
 
@@ -73,6 +70,25 @@
   <script type="text/javascript" src="../public/maskedinput/maskedinput.min.js"></script> -->
   <script>
   $(function(){
+      // faz funcionar o material select
+      $('select').material_select();
+
+      $.ajax({
+          url:        'http://localhost:1337/veiculo',
+          dataType:   'JSON',
+          method:     'GET'
+      }).done(function(ret) {
+        var veiculos = ret;
+        var div = '';
+        for(i = 0; i < veiculos.length; i++)
+        {
+          $('#select-car').append('<option value="'+veiculos[i]['id']+'">'+veiculos[i]['placa']+'</option>');
+        }
+        // $('#select-car').append(document.createTextNode(div));
+      }).fail(function(req) {
+        console.log("error");
+      });
+
 
       // esconde avisos
       $('#latitude-aviso').hide();
@@ -84,8 +100,8 @@
 
       // define mask para latitude
       $.mask.definitions['~']='[-]?';
-      $('#latitude').mask("~999.99999");
-      $('#longitude').mask('~99.99999');
+      $('#longitude').mask("~999.9999");
+      $('#latitude').mask('~99.9999');
 
       /* faz tratamento no salvar
         para controlar o tamanho da latitude e longitude*/
@@ -95,6 +111,27 @@
         {
           if($('#latitude').val() < -90 || $('#latitude').val() > 90)
           {
+            var _json_object = {
+              "data": Date.now(),
+              "posicao": {
+                "latitude": $('#latitude').val(),
+                "longitude": $('#longitude').val()
+              },
+              "veiculo": $('#select-car:selected').attr('id')
+            };
+
+            $.ajax({
+                url:        'http://localhost:1337/ponto/create',
+                dataType:   'JSON',
+                data: _json_object,
+                method:     'POST'
+            }).done(function(ret) {
+
+            }).fail(function(req) {
+
+            }).always(function() {
+
+            });
 
           }
           else {

@@ -60,27 +60,7 @@
                 </tr>
               </thead>
 
-              <tbody>
-                <tr>
-                  <td>Estacionamento 24hrs</td>
-                  <td>R$ 5,00/h</td>
-                  <td>2km</td>
-                </tr>
-                <tr>
-                  <td>Estacionamento do Zé</td>
-                  <td>R$ 3,00/h</td>
-                  <td>1,5km</td>
-                </tr>
-                <tr>
-                  <td>Mega Estacionamento 24 horas</td>
-                  <td>R$ 2,00/h</td>
-                  <td>15km</td>
-                </tr>
-                <tr>
-                  <td>Estacionamento Julio das 6 às 22 horas</td>
-                  <td>R$ 5,70/h</td>
-                  <td>5km</td>
-                </tr>
+              <tbody id="estacionamentos">
               </tbody>
             </table>
         </div>
@@ -109,29 +89,33 @@
       $('#longitude-aviso').hide();
 
       // define mask para latitude
-      $.mask.definitions['~']='[-]?';
-      $('#latitude').mask("~999.99999");
-      $('#longitude').mask('~99.99999');
+      // $.mask.definitions['~']='[-]?';
+      // $('#longitude').mask("~999.9999");
+      // $('#latitude').mask('~99.9999');
 
       /* faz tratamento no salvar
         para controlar o tamanho da latitude e longitude*/
       $('#buscar').on('click', function(evt){
         evt.preventDefault();
-        if($('#latitude').val() < -90 || $('#longitude').val() > 90)
-        {
-          if($('#longitude').val() < -180 || $('#latitude').val() > 180)
+        var url = 'http://localhost:1337/estacionamento/proximos?latitude='+$('#latitude').val()+'&longitude='+$('#longitude').val();
+        $.ajax({
+            url:        url,
+            dataType:   'JSON',
+            method:     'GET'
+        }).done(function(ret) {
+          var estacionamento = ret;
+          for(i = 0; i < estacionamento.length; i++)
           {
-            // verificar campos vazios
-              // se passar na verificação, realizar ajax
-              // se não, lançar exceção
+            $('#estacionamentos').apped('<tr>\
+                                            <td>'+estacionamento[i]['nome']+'</td>\
+                                            <td>R$ '+estacionamento[i]['precoPorMinuto']+'</td>\
+                                            <td>'+estacionamento[i]['distanciaEmMetros']+'</td>\
+                                          </tr>');
           }
-          else {
-            $('#latitude-aviso').show();
-          }
-        }
-        else {
-          $('#longitude-aviso').show();
-        }
+          // $('#select-car').append(document.createTextNode(div));
+        }).fail(function(req) {
+          console.log("error");
+        });
       });
 
   });
