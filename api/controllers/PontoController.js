@@ -22,32 +22,36 @@ module.exports = {
 		query += "RETURNING id, area;"
 
 		Ponto.query(query, [], function (err, rawResult) {
-			ponto.id = rawResult.rows[0].id;
-			ponto.area = rawResult.rows[0].area;
-			// Verifica se o ponto está em um estacionamento
-			query = "SELECT * FROM estacionamento WHERE ST_Contains('" + ponto.area + "', area)";
-			Estacionamento.query(query, [], function(err, rawResult) {
-				var estacionado = false;
-				query = "SELECT ((EXTRACT(MINUTE FROM ('" + ponto.data + "' - data)) * 60) / ST_Distance_Sphere(area,  ST_GeomFromText('POINT(" + ponto.posicao.longitude +" " + ponto.posicao.latitude +")', 4326)) * 3.6)"
-				query += " as velocidade FROM ponto WHERE veiculo = " + ponto.veiculo + "AND id != " + ponto.id + " ORDER BY data DESC LIMIT 1";
-				Ponto.query(query, [], function(err, rawResult) {
-					console.log(rawResult);
-					// if (rawResult.rows > 0) {
-					// 	ponto.velocidade = rawResult.rows[0].velocidade
-					// }
+			if (rawResult.rowCount > 0) {
+				ponto.id = rawResult.rows[0].id;
+				ponto.area = rawResult.rows[0].area;
+				// Verifica se o ponto está em um estacionamento
+				query = "SELECT * FROM estacionamento WHERE ST_Contains('" + ponto.area + "', area)";
+				Estacionamento.query(query, [], function(err, rawResult) {
+					var estacionado = false;
+					query = "SELECT ((ST_Distance_Sphere(area,  ST_GeomFromText('POINT(" + ponto.posicao.longitude +" " + ponto.posicao.latitude +")', 4326)) / EXTRACT(MINUTE FROM ('" + ponto.data + "' - data)) * 60) * 3.6)"
+					query += " as velocidade FROM ponto WHERE veiculo = " + ponto.veiculo + "AND id != " + ponto.id + " ORDER BY data DESC LIMIT 1";
+					if (rawResult.rowCount > 0) {
+						ponto.estacionamentoAtual = rawResult.rows[0].nome;
+					}
+					Ponto.query(query, [], function(err, rawResult) {
+						if (err) {
+						}else{
+							if (rawResult.rowCount > 0) {
+								ponto.velocidade = rawResult.rows[0].velocidade
+							}
+						}
+						res.json({
+							_id: ponto.id,
+							data: ponto.data,
+							posicao: ponto.posicao,
+							veiculo: ponto.veiculo,
+							estacionamentoAtual: ponto.estacionamentoAtual,
+							velocidadeAbsoluta: ponto.velocidade
+						})
+					});
 				});
-				if (rawResult.rows > 0) {
-					ponto.estacionamentoAtual = rawResult.rows[0].nome;
-				}
-				res.json({
-					_id: ponto.id,
-					data: ponto.data,
-					posicao: ponto.posicao,
-					veiculo: ponto.veiculo,
-					estacionamentoAtual: ponto.estacionamentoAtual,
-					velocidadeAbsoluta: 0
-				})
-			});
+			}
 		});
 	}
 

@@ -10,6 +10,9 @@ module.exports = {
   attributes: {
     data: {
       type: 'datetime'
+    },
+    faturado: {
+    	type: 'boolean'
     }
   }
 };
